@@ -1,0 +1,54 @@
+DOCKER COMMANDS
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+Docker Installation in Ubuntu 
+sudo apt update 
+sudo apt install docker.io -y
+sudo systemctl start docker 
+started mode 
+sudo docker pull nginx 
+image is pulled but when typed docker ps got the below error 
+permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Get "http://%2Fvar%2Frun%2Fdocker.sock/v1.24/containers/json": dial unix /var/run/docker.sock: connect: permission denied
+Provide permissions to the ubuntu user to access docker 
+sudo usermod -aG docker ubuntu 
+sudo docker images --- displays the images 
+sudo docker ps -- list all the running containers
+sudo docker ps -a --- lists all the running and non-running containers
+docker run nginx >> runs the nginx in the foreground mode 
+docker inspect nginx >> displays the information about nginx version
+docker stop containerid >>> stops the respective container 
+docker run -d --name mynginx -p 443 nginx >> run the nginx with container name as mynginx in background mode on port 443
+building apache service using dockerfile 
+write a dockerfile with required commands
+docker build -t imagename . >> this command builds a dockerimage with provided dockerimage name by fetching the dockerfile from the current path.
+docker container create -i -t --name myapache myapache-image >> creates a container with name myapache and image name 
+docker container start containername >> starts the container in foreground mode
+docker rmi -f nginx >> removes the nginx image in a forceful mode
+docker tag IMAGE_ID demo/nginx_img:version1.0 >> Tag an image referenced by Image ID
+SOURCE_IMAGE[:TAG] TARGET_IMAGE[:TAG]
+docker tag IMAGE_NAME demo/nginx_img:version2.0 >> Tag an image referenced by name
+docker tag IMAGE_NAME:IMAGE_TAG demo/nginx_img:version3.0.latest >> Tag an image referenced by name and tag
+docker tag myapache demo/myapache_img:version1.0 >> tagging an image by imagename
+docker rmi demo/myapache_img:version1.0 >> remove the tagging image 
+docker exec containerId ls >> displays all the data wrt docker container
+docker network create networkname >> creates a network 
+docker network rm networkname >> removes a network 
+Connect an nginx container to the my-net network. Also, publish port 80 in the container to port 8080 on the Docker host
+sudo docker create --name my-nginx \
+  --network my-net \
+  --publish 8080:80 \
+  nginx:latest
+sudo docker network connect my-net my-nginx >> connects to the above created my-net network 
+sudo docker container inspect my-nginx  >> inspect the my-nginx container and check the networks 
+sudo docker network disconnect my-net my-nginx >> disconnect from the network and again do an aspect to check the network
+
+create a default bridge network :
+sudo docker network create mynetwork  >> creates a mynetwork which is a bridge network by default 
+sudo docker network ls >> lists all the networks
+sudo docker network inspect mynetwork >> inspects mynetwork 
+
+VOLUMES :
+FROM ubuntu 
+volume ["/myvolume"]
+docker build -t myimage .
+docker run -it --name container1 myimage /bin/bash 
